@@ -58,18 +58,127 @@ const questions = [
  
 ]
 
+let currentQuestion = 0;
+let result = 0;
+let min = 0;
+let number = 0;
 
 Start_btn.addEventListener('click',function(){
 
     Start_btn.style.display  = 'none';
 
-    let number = 0 ;
-
     time.textContent = number ; 
 
     setInterval (()=>{
+        
     number++ ; 
-    time.textContent = number;
+        if(number == 60){
+        number = 0 ;
+        min++ ;
+
+     }
+     
+
+    time.textContent =min +' min' +':'+ number +' sec';
+    //console.log(number);
 
 },1000);
+
+
+
+showQuestion(currentQuestion);
+
 });
+
+function showQuestion (index){
+    quiz_container.innerHTML = '';
+
+    const itemQ = questions[index];
+
+    const itemDev = document.createElement('div');
+    const itemTitle = document.createElement('p');
+
+    itemTitle.textContent = itemQ.q;
+    itemDev.appendChild(itemTitle);
+
+
+
+    for (let i = 0; i < itemQ.o.length; i++) {
+
+        const option = itemQ.o[i];
+
+        const btnQ = document.createElement('button');
+        btnQ.textContent = option ;
+
+        btnQ.addEventListener('click',function(answerBtn,correctAnswer){
+            return function (){
+                if(answerBtn.textContent === correctAnswer){
+                    answerBtn.style.backgroundColor = 'green';
+                    result ++ ; 
+                }
+                else{
+                    answerBtn.style.backgroundColor = 'red';
+
+                    const allButtons = itemDev.querySelectorAll('button');
+                    for(let j = 0; j < allButtons.length; j++){
+                        const btnitem =allButtons[j]
+                        let correct = itemQ.a;
+                        if(btnitem.textContent == correct){
+                            btnitem.style.background='green'
+                        }
+                    }
+                }
+
+                setTimeout (()=>{
+                    currentQuestion ++ ;
+
+                    if(currentQuestion < questions.length){
+                        showQuestion(currentQuestion);
+                    }
+                    else{
+                        let feedback = '';
+                        let feedbacktime = '';
+
+                        if(result >= 8 )
+                        {
+                            feedback = 'Excellent';
+                        }
+
+                        else if (result >= 5){
+                            feedback = 'Bien';
+                        }
+                        else{
+                            feedback = 'Peut mieux faire';
+                        };
+
+                        if(min >= 5){
+                            feedbacktime = 'You can be faster!';
+                        }
+                        else{
+                            feedbacktime = 'Good job on time!';
+                        }
+
+                        quiz_container.innerHTML= result +'/'+questions.length + 'time is ' +time.textContent + '  ' + feedback + ' ' + feedbacktime;
+
+                        
+                        time.style.display='none'
+
+                      //restat btn
+                      
+                      
+                    }
+
+                    
+               }, 500);
+            }
+        }(btnQ,itemQ.a));
+        
+        itemDev.appendChild(btnQ);
+        quiz_container.appendChild(itemDev);
+        
+    }
+}
+
+
+
+//console.log(questions[0].o[1])
