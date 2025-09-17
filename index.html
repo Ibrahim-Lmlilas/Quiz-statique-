@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/webp" href="img/codedex-bot-logo-compressed.webp">
     <title>My Quiz</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,10 +16,40 @@
     <p id = 'time'></p>
 
 
+    <div id="name_modal">
+        <div>
+            <input type="text" id="name" value="">
+        </div>
+
+        <div id="cart_selection">
+
+            <div class="cart" data-cart="js">
+            <input type="radio" id="js_checkbox" name="category" value="js_basics">
+            <label for="js-checkbox">
+            <h3>js</h3>
+            </label>
+            </div>
+
+            <div class="cart" data-cart="html">
+            <input type="radio" id="html-checkbox" name="category" value="html_basics">
+            <label for="html-checkbox">
+            <h3>html</h3>
+            </label>
+            </div>
+
+            <div class="cart" data-cart="css">
+            <input type="radio" id="css-checkbox" name="category" value="css_basics">
+            <label for="css-checkbox">
+            <h3>css</h3>
+            </label>
+            </div>
+        </div>
+    </div>
+
     <div id="quiz_container">
        
     </div>
-    <button id  = 'Start_btn'> Start Quiz </button>
+    <button id  = 'Start_btn' > Start Quiz </button>
 
 
     <script src = 'script.js'></script>
