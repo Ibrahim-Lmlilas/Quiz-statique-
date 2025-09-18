@@ -219,7 +219,8 @@ const themes = {
   ]
 };
 
-
+//console.log(themes.js_basics[0].q)
+ 
 const Start_btn = document.getElementById('Start_btn');
 const time = document.getElementById('time');
 const quiz_container = document.getElementById('quiz_container');
@@ -228,7 +229,7 @@ const carts = document.getElementsByClassName('cart');
 const cart_selection = document.getElementById('cart_selection');
 const name_modal = document.getElementById('name_modal');
 
-let timeqcm ;
+let timeqcm ; 
 let optioncart = false ;
 //console.log(optioncart);
 for (let i = 0; i < carts.length; i++) {
@@ -242,9 +243,13 @@ for (let i = 0; i < carts.length; i++) {
         // Map the cart data to the correct theme key
         let themeKey = cart.dataset.cart + '_basics';
         localStorage.setItem('themes', themeKey);
-        console.log(localStorage.getItem('themes'));
+        //console.log(localStorage.getItem('themes'));
 
-    })
+     
+
+    });
+
+    
 }
 
 
@@ -288,13 +293,24 @@ Start_btn.addEventListener('click',function(){
 
     time.textContent =min +' min' +':'+ number +' sec';
     //console.log(number);
+ 
 
-},1000);
+
+    },1000);
 
 
 
 showQuestion(currentQuestion);
+
+
+        setInterval(()=>{
+          currentQuestion ++
+          showQuestion(currentQuestion);
+            
+        },3000)
 }
+
+
 });
 
 function showQuestion (index){
@@ -308,7 +324,7 @@ function showQuestion (index){
     const itemDev = document.createElement('div');
     const itemTitle = document.createElement('p');
 
-    itemTitle.textContent = `Question ${index + 1}: ${itemQ.q}`;
+    itemTitle.textContent = "Question " + (index + 1) + ": " + itemQ.q;
    
     itemDev.appendChild(itemTitle);
 
@@ -321,15 +337,15 @@ function showQuestion (index){
 
         btnQ.addEventListener('click',function(answerBtn, optionIndex){
             return function (){
-                // Disable all buttons after click
-                const allButtons = itemDev.querySelectorAll('button');
-                allButtons.forEach(btn => btn.disabled = true);
 
-                // Check if this option is correct
+                const allButtons = itemDev.querySelectorAll('button');
+                
+
                 if(itemQ.correct.includes(optionIndex)){
                     answerBtn.style.backgroundColor = 'green';
                     result++;
                 }
+              
                 else{
                     answerBtn.style.backgroundColor = 'red';
 
@@ -340,6 +356,11 @@ function showQuestion (index){
                         }
                     }
                 }
+
+                
+
+
+                
 
                 setTimeout (()=>{
                     currentQuestion++;
@@ -370,14 +391,13 @@ function showQuestion (index){
                             feedbacktime = 'Good job on time!';
                         }
 
-                        quiz_container.innerHTML= `Score: ${result}/${currentThemeQuestions.length}<br>Time: ${time.textContent}<br>${feedback}<br>${feedbacktime}<br>Félicitations ${nickname.value}!`;
+                        quiz_container.innerHTML= "Score: " + result + "/" + currentThemeQuestions.length + "<br>Time: " + time.textContent + "<br>" + feedback + "<br>" + feedbacktime + "<br>Félicitations " + nickname.value + "!";
 
                         
                         time.style.display='none'
 
                         clearInterval(timeqcm);
                         
-                      //restat btn
                       
                       
                     }
