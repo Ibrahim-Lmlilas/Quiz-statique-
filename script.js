@@ -245,7 +245,7 @@ for (let i = 0; i < carts.length; i++) {
         localStorage.setItem('themes', themeKey);
         //console.log(localStorage.getItem('themes'));
 
-     
+        
 
     });
 
@@ -303,9 +303,16 @@ Start_btn.addEventListener('click',function(){
 showQuestion(currentQuestion);
 
 
-        setInterval(()=>{
+        let autoQuestionInterval = setInterval(()=>{
           currentQuestion ++
-          showQuestion(currentQuestion);
+          const my_themes = localStorage.getItem('themes');
+          const currentThemeQuestions = themes[my_themes];
+          
+          if(currentQuestion < currentThemeQuestions.length){
+            showQuestion(currentQuestion);
+          } else {
+            clearInterval(autoQuestionInterval);
+          }
             
         },3000)
 }
@@ -319,6 +326,11 @@ function showQuestion (index){
 
     const my_themes = localStorage.getItem('themes');
     const currentThemeQuestions = themes[my_themes];
+    
+    if (!currentThemeQuestions || index >= currentThemeQuestions.length) {
+        return;
+    }
+    
     const itemQ = currentThemeQuestions[index];
 
     const itemDev = document.createElement('div');
