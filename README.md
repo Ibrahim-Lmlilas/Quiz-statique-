@@ -52,6 +52,7 @@ Quiz-statique/
 
 
 
+```
 
 ## 🎯 Utilisation
 
@@ -84,10 +85,6 @@ Quiz-statique/
 ### 📚 Librairies
 - **📄 jsPDF** - Génération de documents PDF
 - **💾 localStorage** - Stockage navigateur
-
-
-
-
 
 #### 🎨 Couleurs (style.css)
 ```css
