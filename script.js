@@ -652,11 +652,50 @@ function showResults() {
             '<p class="time-feedback">' + feedbacktime + '</p>' +
             '<p class="congratulations">Félicitations ' + nickname.value + '!</p>' +
             '<button id="download-pdf" style="margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Télécharger PDF</button>' +
+            '<button id="restart-btn" style="margin-top: 10px; padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Recommencer</button>' +
         '</div>';
     
     const downloadBtn = document.getElementById('download-pdf');
     downloadBtn.addEventListener('click', function() {
         generatePDF(quizData);
+    });
+    
+    const restartBtn = document.getElementById('restart-btn');
+    restartBtn.addEventListener('click', function() {
+        // Reset all variables
+        currentQuestion = 0;
+        result = 0;
+        min = 0;
+        number = 0;
+        detailedResults = [];
+        optioncart = false;
+        
+        // Clear timers
+        clearInterval(timeqcm);
+        clearInterval(questionTimer);
+        
+        // Reset display
+        quiz_container.style.display = 'none';
+        Start_btn.style.display = '';
+        Start_btn.hidden = false;
+        name_modal.hidden = false;
+        time.hidden = false;
+        time.textContent = '';
+        
+        // Clear cart selections
+        const radios = document.querySelectorAll('input[type="radio"]');
+        for(let i = 0; i < radios.length; i++) {
+            radios[i].checked = false;
+        }
+        
+        // Reset cart styles
+        const allCarts = document.getElementsByClassName('cart');
+        for(let i = 0; i < allCarts.length; i++) {
+            allCarts[i].style.borderColor = '';
+            allCarts[i].style.boxShadow = '';
+            const h3 = allCarts[i].querySelector('h3');
+            if(h3) h3.style.color = '';
+        }
     });
     
     time.hidden = true;
