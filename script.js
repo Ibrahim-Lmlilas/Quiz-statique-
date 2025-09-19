@@ -260,6 +260,7 @@ let min = 0;
 let number = 0;
 let questionTimer = null;
 let questionTimeLeft = 30;
+let detailedResults = [];
 
 Start_btn.addEventListener('click',function(){
 
@@ -279,6 +280,10 @@ Start_btn.addEventListener('click',function(){
     else{
     Start_btn.hidden = true;
     name_modal.hidden = true;
+    
+    currentQuestion = 0;
+    result = 0;
+    detailedResults = [];
 
     time.textContent = number ; 
 
@@ -398,9 +403,28 @@ function showQuestion (index){
                         answerBtn.style.backgroundColor = 'green';
                         answerBtn.style.color = 'white';
                         result++;
+                        
+                        detailedResults.push({
+                            questionId: itemQ.id,
+                            question: itemQ.q,
+                            userAnswer: [option],
+                            correctAnswers: itemQ.correct.map(idx => itemQ.options[idx]),
+                            isCorrect: true,
+                            questionType: 'single'
+                        });
                     } else {
                         answerBtn.style.backgroundColor = 'red';
                         answerBtn.style.color = 'white';
+                        
+                        detailedResults.push({
+                            questionId: itemQ.id,
+                            question: itemQ.q,
+                            userAnswer: [option],
+                            correctAnswers: itemQ.correct.map(idx => itemQ.options[idx]),
+                            isCorrect: false,
+                            questionType: 'single'
+                        });
+                        
                         for(let j = 0; j < allButtons.length; j++){
                             if(itemQ.correct.includes(j)){
                                 allButtons[j].style.backgroundColor = 'green';
@@ -488,9 +512,37 @@ function showQuestion (index){
             if(correctCount === totalCorrect && wrongSelections.length === 0) {
                 result++;
                 questionScore = 1;
+                
+                detailedResults.push({
+                    questionId: itemQ.id,
+                    question: itemQ.q,
+                    userAnswer: selectedAnswers.map(idx => itemQ.options[idx]),
+                    correctAnswers: itemQ.correct.map(idx => itemQ.options[idx]),
+                    isCorrect: true,
+                    questionType: 'multiple'
+                });
             } else if(correctCount > 0 && wrongSelections.length === 0) {
                 // Partial credit if some correct answers selected and no wrong ones
                 result += questionScore / totalCorrect;
+                
+                detailedResults.push({
+                    questionId: itemQ.id,
+                    question: itemQ.q,
+                    userAnswer: selectedAnswers.map(idx => itemQ.options[idx]),
+                    correctAnswers: itemQ.correct.map(idx => itemQ.options[idx]),
+                    isCorrect: false,
+                    questionType: 'multiple',
+                    partialCredit: true
+                });
+            } else {
+                detailedResults.push({
+                    questionId: itemQ.id,
+                    question: itemQ.q,
+                    userAnswer: selectedAnswers.map(idx => itemQ.options[idx]),
+                    correctAnswers: itemQ.correct.map(idx => itemQ.options[idx]),
+                    isCorrect: false,
+                    questionType: 'multiple'
+                });
             }
             
             // Show feedback
@@ -549,6 +601,31 @@ function showResults() {
         feedbacktime = 'Good job on time!';
     }
 
+    // Store quiz results in localStorage by nickname
+    const quizData = {
+        nickname : nickname.value,  
+        score: result.toFixed(1),
+        totalQuestions: currentThemeQuestions.length,
+        percentage: percentage,
+        time: time.textContent,
+        theme: my_themes,
+        feedback: feedback,
+        timeFeedback: feedbacktime,
+        date: new Date().toISOString(),
+        detailedResults: detailedResults
+    };
+    
+    // Get existing results for this nickname or create empty array
+    let userResults = JSON.parse(localStorage.getItem(nickname.value)) || [];
+    
+    // Add new result
+    userResults.push(quizData);
+    
+    // Store back in localStorage
+    localStorage.setItem(nickname.value, JSON.stringify(userResults));
+    
+    //console.log('Quiz results saved for:', nickname.value);
+
     quiz_container.innerHTML = '<div class="results-container">' +
             '<h2>Résultats du Quiz</h2>' +
             '<p class="score">Score: ' + result.toFixed(1) + '/' + currentThemeQuestions.length + '</p>' +
@@ -565,6 +642,17 @@ function showResults() {
 }
 
 function skipToNextQuestion(itemDev, itemQ) {
+    // Record that user didn't answer in time
+    detailedResults.push({
+        questionId: itemQ.id,
+        question: itemQ.q,
+        userAnswer: ['Pas de réponse (temps écoulé)'],
+        correctAnswers: itemQ.correct.map(idx => itemQ.options[idx]),
+        isCorrect: false,
+        questionType: itemQ.multi ? 'multiple' : 'single',
+        timedOut: true
+    });
+    
     // Show time's up message
     const timeUpMsg = document.createElement('div');
     timeUpMsg.className = 'time-up-message';
