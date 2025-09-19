@@ -634,7 +634,13 @@ function showResults() {
             '<p class="feedback">' + feedback + '</p>' +
             '<p class="time-feedback">' + feedbacktime + '</p>' +
             '<p class="congratulations">Félicitations ' + nickname.value + '!</p>' +
+            '<button id="download-pdf" style="margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Télécharger PDF</button>' +
         '</div>';
+    
+    const downloadBtn = document.getElementById('download-pdf');
+    downloadBtn.addEventListener('click', function() {
+        generatePDF(quizData);
+    });
     
     time.hidden = true;
     clearInterval(timeqcm);
@@ -702,4 +708,91 @@ function skipToNextQuestion(itemDev, itemQ) {
             showResults();
         }
     }, 2000);
+}
+
+function generatePDF(quizData) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Set font
+    doc.setFontSize(20);
+    doc.text('RESULTATS DU QUIZ', 20, 30);
+    
+    doc.setFontSize(12);
+    let yPosition = 50;
+    
+    // Basic info
+    doc.text('Nom: ' + quizData.nickname, 20, yPosition);
+    yPosition += 10;
+    doc.text('Theme: ' + quizData.theme, 20, yPosition);
+    yPosition += 10;
+    doc.text('Date: ' + new Date(quizData.date).toLocaleDateString('fr-FR'), 20, yPosition);
+    yPosition += 10;
+    doc.text('Score: ' + quizData.score + '/' + quizData.totalQuestions, 20, yPosition);
+    yPosition += 10;
+    doc.text('Pourcentage: ' + quizData.percentage + '%', 20, yPosition);
+    yPosition += 10;
+    doc.text('Temps: ' + quizData.time, 20, yPosition);
+    yPosition += 10;
+    doc.text('Evaluation: ' + quizData.feedback, 20, yPosition);
+    yPosition += 10;
+    doc.text('Temps: ' + quizData.timeFeedback, 20, yPosition);
+    yPosition += 20;
+    
+    // Details section
+    doc.setFontSize(14);
+    doc.text('DETAILS DES QUESTIONS:', 20, yPosition);
+    yPosition += 15;
+    
+    doc.setFontSize(10);
+    for(let i = 0; i < quizData.detailedResults.length; i++) {
+        let detail = quizData.detailedResults[i];
+        
+        // Check if we need a new page
+        if(yPosition > 250) {
+            doc.addPage();
+            yPosition = 20;
+        }
+        
+        doc.setFont(undefined, 'bold');
+        doc.text('Question ' + (i + 1) + ':', 20, yPosition);
+        yPosition += 8;
+        
+        doc.setFont(undefined, 'normal');
+        // Split long questions into multiple lines
+        const questionLines = doc.splitTextToSize(detail.question, 170);
+        doc.text(questionLines, 20, yPosition);
+        yPosition += questionLines.length * 6 + 5;
+        
+        doc.text('Votre reponse: ' + detail.userAnswer.join(', '), 20, yPosition);
+        yPosition += 8;
+        
+        doc.text('Reponse correcte: ' + detail.correctAnswers.join(', '), 20, yPosition);
+        yPosition += 8;
+        
+        if(detail.isCorrect) {
+            doc.setTextColor(0, 128, 0); // Green
+            doc.text('Resultat: CORRECT', 20, yPosition);
+        } else {
+            doc.setTextColor(255, 0, 0); // Red
+            doc.text('Resultat: INCORRECT', 20, yPosition);
+        }
+        doc.setTextColor(0, 0, 0); // Reset to black
+        yPosition += 8;
+        
+        if(detail.partialCredit) {
+            doc.text('(Credit partiel accorde)', 20, yPosition);
+            yPosition += 8;
+        }
+        if(detail.timedOut) {
+            doc.text('(Temps ecoule)', 20, yPosition);
+            yPosition += 8;
+        }
+        
+        yPosition += 10;
+    }
+    
+    // Save the PDF
+    const fileName = 'Quiz_Results_' + quizData.nickname + '_' + new Date().toISOString().split('T')[0] + '.pdf';
+    doc.save(fileName);
 }
