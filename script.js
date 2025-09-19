@@ -1,223 +1,223 @@
-const themes = {
-  "js_basics": [
-    {
-      id: 1,
-      q: "Quels mots-clés peuvent déclarer une variable en JS ?",
-      options: ["const", "let", "var", "function"],
-      correct: [0,1,2],
-      multi: true
-    },
-    {
-      id: 2,
-      q: "Quelle est la sortie de : console.log(2 + '2');",
-      options: ["4", "'22'", "NaN"],
-      correct: [1],
-      multi: false
-    },
-    {
-      id: 3,
-      q: "Quelle méthode permet d'ajouter un élément à la fin d’un tableau ?",
-      options: ["push()", "pop()", "shift()"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 4,
-      q: "Quelle(s) valeur(s) est/sont considérée(s) comme falsy en JS ?",
-      options: ["0", "''", "null", "undefined", "NaN", "'false'"],
-      correct: [0,1,2,3,4],
-      multi: true
-    },
-    {
-      id: 5,
-      q: "Quel symbole est utilisé pour un commentaire sur une ligne ?",
-      options: ["//", "/* */", "#"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 6,
-      q: "Quelle(s) boucle(s) peut-on utiliser pour parcourir un tableau ?",
-      options: ["for", "for...of", "for...in", "while"],
-      correct: [0,1,3],
-      multi: true
-    },
-    {
-      id: 7,
-      q: "Quelle méthode transforme une chaîne en nombre entier ?",
-      options: ["parseInt()", "Number()", "String()"],
-      correct: [0,1],
-      multi: true
-    },
-    {
-      id: 8,
-      q: "Comment accéder au premier élément d’un tableau arr ?",
-      options: ["arr[0]", "arr(0)", "arr.first"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 9,
-      q: "typeof null retourne quoi ?",
-      options: ["'null'", "'object'", "'undefined'"],
-      correct: [1],
-      multi: false
-    },
-    {
-      id: 10,
-      q: "Comment déclarer une fonction ?",
-      options: ["function maFonction() {}", "def maFonction() {}", "func maFonction() {}"],
-      correct: [0],
-      multi: false
-    }
-  ],
+  const themes = {
+    "js_basics": [
+      {
+        id: 1,
+        q: "Quels mots-clés peuvent déclarer une variable en JS ?",
+        options: ["const", "let", "var", "function"],
+        correct: [0,1,2],
+        multi: true
+      },
+      {
+        id: 2,
+        q: "Quelle est la sortie de : console.log(2 + '2');",
+        options: ["4", "'22'", "NaN"],
+        correct: [1],
+        multi: false
+      },
+      {
+        id: 3,
+        q: "Quelle méthode permet d'ajouter un élément à la fin d’un tableau ?",
+        options: ["push()", "pop()", "shift()"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 4,
+        q: "Quelle(s) valeur(s) est/sont considérée(s) comme falsy en JS ?",
+        options: ["0", "''", "null", "undefined", "NaN", "'false'"],
+        correct: [0,1,2,3,4],
+        multi: true
+      },
+      {
+        id: 5,
+        q: "Quel symbole est utilisé pour un commentaire sur une ligne ?",
+        options: ["//", "/* */", "#"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 6,
+        q: "Quelle(s) boucle(s) peut-on utiliser pour parcourir un tableau ?",
+        options: ["for", "for...of", "for...in", "while"],
+        correct: [0,1,3],
+        multi: true
+      },
+      {
+        id: 7,
+        q: "Quelle méthode transforme une chaîne en nombre entier ?",
+        options: ["parseInt()", "Number()", "String()"],
+        correct: [0,1],
+        multi: true
+      },
+      {
+        id: 8,
+        q: "Comment accéder au premier élément d’un tableau arr ?",
+        options: ["arr[0]", "arr(0)", "arr.first"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 9,
+        q: "typeof null retourne quoi ?",
+        options: ["'null'", "'object'", "'undefined'"],
+        correct: [1],
+        multi: false
+      },
+      {
+        id: 10,
+        q: "Comment déclarer une fonction ?",
+        options: ["function maFonction() {}", "def maFonction() {}", "func maFonction() {}"],
+        correct: [0],
+        multi: false
+      }
+    ],
 
-  "html_basics": [
-    {
-      id: 1,
-      q: "Quel tag définit un lien hypertexte ?",
-      options: ["<link>", "<a>", "<href>"],
-      correct: [1],
-      multi: false
-    },
-    {
-      id: 2,
-      q: "Quel(s) attribut(s) sont utilisés pour les images ?",
-      options: ["src", "alt", "href", "title"],
-      correct: [0,1],
-      multi: true
-    },
-    {
-      id: 3,
-      q: "Quel tag représente un paragraphe ?",
-      options: ["<p>", "<div>", "<span>"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 4,
-      q: "Quel tag représente un titre principal ?",
-      options: ["<h1>", "<h6>", "<header>"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 5,
-      q: "Quel(s) tag(s) servent pour les listes ?",
-      options: ["<ul>", "<ol>", "<li>", "<dl>"],
-      correct: [0,1,2,3],
-      multi: true
-    },
-    {
-      id: 6,
-      q: "Quel attribut fait ouvrir un lien dans un nouvel onglet ?",
-      options: ["target='_blank'", "href='_new'", "rel='noopener'"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 7,
-      q: "Comment définir un champ obligatoire dans un formulaire ?",
-      options: ["required", "mandatory", "validate"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 8,
-      q: "Quel tag HTML définit un bouton ?",
-      options: ["<button>", "<input>", "<submit>"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 9,
-      q: "Quel tag HTML définit le corps du document ?",
-      options: ["<body>", "<html>", "<main>"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 10,
-      q: "Quel tag HTML est sémantique pour un pied de page ?",
-      options: ["<footer>", "<section>", "<div>"],
-      correct: [0],
-      multi: false
-    }
-  ],
+    "html_basics": [
+      {
+        id: 1,
+        q: "Quel tag définit un lien hypertexte ?",
+        options: ["<link>", "<a>", "<href>"],
+        correct: [1],
+        multi: false
+      },
+      {
+        id: 2,
+        q: "Quel(s) attribut(s) sont utilisés pour les images ?",
+        options: ["src", "alt", "href", "title"],
+        correct: [0,1],
+        multi: true
+      },
+      {
+        id: 3,
+        q: "Quel tag représente un paragraphe ?",
+        options: ["<p>", "<div>", "<span>"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 4,
+        q: "Quel tag représente un titre principal ?",
+        options: ["<h1>", "<h6>", "<header>"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 5,
+        q: "Quel(s) tag(s) servent pour les listes ?",
+        options: ["<ul>", "<ol>", "<li>", "<dl>"],
+        correct: [0,1,2,3],
+        multi: true
+      },
+      {
+        id: 6,
+        q: "Quel attribut fait ouvrir un lien dans un nouvel onglet ?",
+        options: ["target='_blank'", "href='_new'", "rel='noopener'"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 7,
+        q: "Comment définir un champ obligatoire dans un formulaire ?",
+        options: ["required", "mandatory", "validate"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 8,
+        q: "Quel tag HTML définit un bouton ?",
+        options: ["<button>", "<input>", "<submit>"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 9,
+        q: "Quel tag HTML définit le corps du document ?",
+        options: ["<body>", "<html>", "<main>"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 10,
+        q: "Quel tag HTML est sémantique pour un pied de page ?",
+        options: ["<footer>", "<section>", "<div>"],
+        correct: [0],
+        multi: false
+      }
+    ],
 
-  "css_basics": [
-    {
-      id: 1,
-      q: "Quelle propriété change la couleur du texte ?",
-      options: ["color", "background-color", "font-size"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 2,
-      q: "Quelle propriété change la couleur de fond ?",
-      options: ["background-color", "color", "border-color"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 3,
-      q: "Quelle(s) propriété(s) gèrent les marges et paddings ?",
-      options: ["margin", "padding", "border", "spacing"],
-      correct: [0,1],
-      multi: true
-    },
-    {
-      id: 4,
-      q: "Quelle propriété change la taille de la police ?",
-      options: ["font-size", "text-size", "size"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 5,
-      q: "Quelle propriété CSS change l’affichage d’un élément ?",
-      options: ["display", "position", "float"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 6,
-      q: "Quelle propriété CSS fait flotter un élément à gauche ou droite ?",
-      options: ["float", "position", "align"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 7,
-      q: "Quelle(s) valeur(s) de display permettent de créer un flex container ?",
-      options: ["block", "inline-block", "flex", "grid"],
-      correct: [2,3],
-      multi: true
-    },
-    {
-      id: 8,
-      q: "Quelle propriété CSS change la couleur du contour ?",
-      options: ["border-color", "color", "outline-color"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 9,
-      q: "Quelle propriété CSS change la visibilité d’un élément ?",
-      options: ["visibility", "display", "opacity"],
-      correct: [0],
-      multi: false
-    },
-    {
-      id: 10,
-      q: "Quelle propriété CSS permet de centrer un texte ?",
-      options: ["text-align", "align-items", "justify-content"],
-      correct: [0],
-      multi: false
-    }
-  ]
-};
+    "css_basics": [
+      {
+        id: 1,
+        q: "Quelle propriété change la couleur du texte ?",
+        options: ["color", "background-color", "font-size"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 2,
+        q: "Quelle propriété change la couleur de fond ?",
+        options: ["background-color", "color", "border-color"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 3,
+        q: "Quelle(s) propriété(s) gèrent les marges et paddings ?",
+        options: ["margin", "padding", "border", "spacing"],
+        correct: [0,1],
+        multi: true
+      },
+      {
+        id: 4,
+        q: "Quelle propriété change la taille de la police ?",
+        options: ["font-size", "text-size", "size"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 5,
+        q: "Quelle propriété CSS change l’affichage d’un élément ?",
+        options: ["display", "position", "float"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 6,
+        q: "Quelle propriété CSS fait flotter un élément à gauche ou droite ?",
+        options: ["float", "position", "align"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 7,
+        q: "Quelle(s) valeur(s) de display permettent de créer un flex container ?",
+        options: ["block", "inline-block", "flex", "grid"],
+        correct: [2,3],
+        multi: true
+      },
+      {
+        id: 8,
+        q: "Quelle propriété CSS change la couleur du contour ?",
+        options: ["border-color", "color", "outline-color"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 9,
+        q: "Quelle propriété CSS change la visibilité d’un élément ?",
+        options: ["visibility", "display", "opacity"],
+        correct: [0],
+        multi: false
+      },
+      {
+        id: 10,
+        q: "Quelle propriété CSS permet de centrer un texte ?",
+        options: ["text-align", "align-items", "justify-content"],
+        correct: [0],
+        multi: false
+      }
+    ]
+  };
 
 //console.log(themes.js_basics[0].q)
  
@@ -264,6 +264,8 @@ let questionTimer = null;
 let questionTimeLeft = 30;
 let detailedResults = [];
 
+quiz_container.style.display='none'
+
 Start_btn.addEventListener('click',function(){
 
 
@@ -280,6 +282,10 @@ Start_btn.addEventListener('click',function(){
 
 
     else{
+
+      quiz_container.style.display='';
+      Start_btn.style.display='none';
+
     Start_btn.hidden = true;
     name_modal.hidden = true;
     
@@ -365,6 +371,7 @@ function showQuestion (index){
         
         if(itemQ.multi) {
             const optionDiv = document.createElement('div');
+            optionDiv.className = 'option-container';
             
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
@@ -373,7 +380,30 @@ function showQuestion (index){
             
             const label = document.createElement('label');
             label.htmlFor = 'option_' + i;
+            label.className = 'option-label';
             label.textContent = option;
+            
+            // Add click event to the container for better UX
+            optionDiv.addEventListener('click', function(e) {
+                if (e.target !== checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                }
+                // Update visual state
+                if (checkbox.checked) {
+                    optionDiv.classList.add('selected');
+                } else {
+                    optionDiv.classList.remove('selected');
+                }
+            });
+            
+            // Also handle direct checkbox changes
+            checkbox.addEventListener('change', function() {
+                if (checkbox.checked) {
+                    optionDiv.classList.add('selected');
+                } else {
+                    optionDiv.classList.remove('selected');
+                }
+            });
             
             optionDiv.appendChild(checkbox);
             optionDiv.appendChild(label);
@@ -532,13 +562,18 @@ function showQuestion (index){
             }
             
             for(let k = 0; k < checkboxes.length; k++) {
+                var optionContainer = checkboxes[k].parentElement;
                 var label = checkboxes[k].nextElementSibling;
                 if(itemQ.correct.includes(k)) {
                     label.style.color = 'green';
                     label.style.fontWeight = 'bold';
+                    optionContainer.style.borderColor = 'green';
+                    optionContainer.style.backgroundColor = 'rgba(0, 255, 0, 0.2)';
                 } else if(selectedAnswers.includes(k)) {
                     label.style.color = 'red';
                     label.style.fontWeight = 'bold';
+                    optionContainer.style.borderColor = 'red';
+                    optionContainer.style.backgroundColor = 'rgba(255, 0, 0, 0.2)';
                 }
             }
             
@@ -662,11 +697,13 @@ function skipToNextQuestion(itemDev, itemQ) {
     
     if(itemQ.multi) {
         for(let i = 0; i < checkboxes.length; i++) {
+            var optionContainer = checkboxes[i].parentElement;
             var label = checkboxes[i].nextElementSibling;
             if(itemQ.correct.includes(i)) {
                 label.style.color = 'green';
                 label.style.fontWeight = 'bold';
-                label.textContent = label.textContent;
+                optionContainer.style.borderColor = 'green';
+                optionContainer.style.backgroundColor = 'rgba(0, 255, 0, 0.2)';
             }
         }
     } else {
