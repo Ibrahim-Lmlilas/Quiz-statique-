@@ -642,7 +642,7 @@ function showResults() {
     localStorage.setItem(nickname.value, JSON.stringify(userResults));
     
     //console.log('Quiz results saved for:', nickname.value);
-
+    
     quiz_container.innerHTML = '<div class="results-container">' +
             '<h2>Résultats du Quiz</h2>' +
             '<p class="score">Score: ' + result.toFixed(1) + '/' + currentThemeQuestions.length + '</p>' +
