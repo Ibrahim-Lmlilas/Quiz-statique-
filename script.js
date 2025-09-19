@@ -792,6 +792,7 @@ function generatePDF(quizData) {
         yPosition += 10;
     }
     
+    
     // Save the PDF
     const fileName = 'Quiz_Results_' + quizData.nickname + '_' + new Date().toISOString().split('T')[0] + '.pdf';
     doc.save(fileName);
