@@ -231,6 +231,8 @@ const name_modal = document.getElementById('name_modal');
 
 let timeqcm ; 
 let optioncart = false ;
+
+
 //console.log(optioncart);
 for (let i = 0; i < carts.length; i++) {
     const cart  = carts[i];
@@ -329,9 +331,7 @@ function showQuestion (index){
     const my_themes = localStorage.getItem('themes');
     const currentThemeQuestions = themes[my_themes];
     
-    if (!currentThemeQuestions || index >= currentThemeQuestions.length) {
-        return;
-    }
+
     
     const itemQ = currentThemeQuestions[index];
 
@@ -349,15 +349,9 @@ function showQuestion (index){
     
     questionTimer = setInterval(function() {
         questionTimeLeft--;
-        
-        if(timerDisplay) {
+  
             timerDisplay.textContent = 'Temps restant: ' + questionTimeLeft + ' secondes';
-        }
-        
-        if(questionTimeLeft <= 10) {
-        } else if(questionTimeLeft <= 20) {
-        }
-        
+       
         if(questionTimeLeft <= 0) {
             clearInterval(questionTimer);
             skipToNextQuestion(itemDev, itemQ);
@@ -453,7 +447,7 @@ function showQuestion (index){
         submitBtn.addEventListener('click', function(){
             clearInterval(questionTimer);
             
-            const            checkboxes = itemDev.querySelectorAll('input[type="checkbox"]');
+            const checkboxes = itemDev.querySelectorAll('input[type="checkbox"]');
             selectedAnswers = [];
             
             for(let k = 0; k < checkboxes.length; k++) {
@@ -462,10 +456,8 @@ function showQuestion (index){
                 }
             }
             
-            // Check if user selected at least one answer
             if(selectedAnswers.length === 0) {
                 alert('Veuillez sélectionner au moins une réponse!');
-                // Restart timer if no answer selected
                 questionTimer = setInterval(function() {
                     questionTimeLeft--;
                     var timerDisplay = document.getElementById('question-timer');
@@ -480,24 +472,20 @@ function showQuestion (index){
                 return;
             }
             
-            // Disable all checkboxes and submit button
             for(let k = 0; k < checkboxes.length; k++) {
                 checkboxes[k].disabled = true;
             }
             submitBtn.disabled = true;
             
-            // Check answers
             let correctCount = 0;
             let totalCorrect = itemQ.correct.length;
             
-            // Count correct selections
             for(let k = 0; k < selectedAnswers.length; k++) {
                 if(itemQ.correct.includes(selectedAnswers[k])) {
                     correctCount++;
                 }
             }
             
-            // Check for wrong selections
             wrongSelections = [];
             for(let k = 0; k < selectedAnswers.length; k++) {
                 if(!itemQ.correct.includes(selectedAnswers[k])) {
@@ -508,7 +496,6 @@ function showQuestion (index){
             // Calculate score: correct selections minus wrong selections, but not below 0
             let questionScore = Math.max(0, correctCount - wrongSelections.length);
             
-            // Give full point only if all correct answers are selected and no wrong ones
             if(correctCount === totalCorrect && wrongSelections.length === 0) {
                 result++;
                 questionScore = 1;
@@ -522,7 +509,6 @@ function showQuestion (index){
                     questionType: 'multiple'
                 });
             } else if(correctCount > 0 && wrongSelections.length === 0) {
-                // Partial credit if some correct answers selected and no wrong ones
                 result += questionScore / totalCorrect;
                 
                 detailedResults.push({
@@ -545,7 +531,6 @@ function showQuestion (index){
                 });
             }
             
-            // Show feedback
             for(let k = 0; k < checkboxes.length; k++) {
                 var label = checkboxes[k].nextElementSibling;
                 if(itemQ.correct.includes(k)) {
@@ -582,7 +567,6 @@ function showResults() {
     let feedback = '';
     let feedbacktime = '';
     
-    // Calculate percentage score
     let percentage = Math.round((result / currentThemeQuestions.length) * 100);
 
     if(percentage >= 80) {
@@ -601,7 +585,6 @@ function showResults() {
         feedbacktime = 'Good job on time!';
     }
 
-    // Store quiz results in localStorage by nickname
     const quizData = {
         nickname : nickname.value,  
         score: result.toFixed(1),
@@ -618,7 +601,6 @@ function showResults() {
     // Get existing results for this nickname or create empty array
     let userResults = JSON.parse(localStorage.getItem(nickname.value)) || [];
     
-    // Add new result
     userResults.push(quizData);
     
     // Store back in localStorage
@@ -648,7 +630,7 @@ function showResults() {
 }
 
 function skipToNextQuestion(itemDev, itemQ) {
-    // Record that user didn't answer in time
+    
     detailedResults.push({
         questionId: itemQ.id,
         question: itemQ.q,
@@ -659,7 +641,7 @@ function skipToNextQuestion(itemDev, itemQ) {
         timedOut: true
     });
     
-    // Show time's up message
+    
     const timeUpMsg = document.createElement('div');
     timeUpMsg.className = 'time-up-message';
     timeUpMsg.textContent = 'Temps écoulé! Passage à la question suivante...';
@@ -677,7 +659,7 @@ function skipToNextQuestion(itemDev, itemQ) {
         checkboxes[i].disabled = true;
     }
     
-    // Show correct answers
+    
     if(itemQ.multi) {
         for(let i = 0; i < checkboxes.length; i++) {
             var label = checkboxes[i].nextElementSibling;
@@ -714,7 +696,7 @@ function generatePDF(quizData) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     
-    // Set font
+    
     doc.setFontSize(20);
     doc.text('RESULTATS DU QUIZ', 20, 30);
     
@@ -771,13 +753,13 @@ function generatePDF(quizData) {
         yPosition += 8;
         
         if(detail.isCorrect) {
-            doc.setTextColor(0, 128, 0); // Green
+            doc.setTextColor(0, 128, 0); 
             doc.text('Resultat: CORRECT', 20, yPosition);
         } else {
-            doc.setTextColor(255, 0, 0); // Red
+            doc.setTextColor(255, 0, 0); 
             doc.text('Resultat: INCORRECT', 20, yPosition);
         }
-        doc.setTextColor(0, 0, 0); // Reset to black
+        doc.setTextColor(0, 0, 0); 
         yPosition += 8;
         
         if(detail.partialCredit) {
@@ -792,7 +774,7 @@ function generatePDF(quizData) {
         yPosition += 10;
     }
     
-    
+
     // Save the PDF
     const fileName = 'Quiz_Results_' + quizData.nickname + '_' + new Date().toISOString().split('T')[0] + '.pdf';
     doc.save(fileName);
