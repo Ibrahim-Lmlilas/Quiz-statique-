@@ -240,12 +240,11 @@ for (let i = 0; i < carts.length; i++) {
         //console.log(optioncart);
         //console.log(cart.dataset.cart);
         
-        // Map the cart data to the correct theme key
         let themeKey = cart.dataset.cart + '_basics';
         localStorage.setItem('themes', themeKey);
         //console.log(localStorage.getItem('themes'));
 
-        
+
 
     });
 
@@ -259,6 +258,8 @@ let currentQuestion = 0;
 let result = 0;
 let min = 0;
 let number = 0;
+let questionTimer = null;
+let questionTimeLeft = 30;
 
 Start_btn.addEventListener('click',function(){
 
@@ -276,34 +277,27 @@ Start_btn.addEventListener('click',function(){
 
 
     else{
-    Start_btn.style.display  = 'none';
-    name_modal.style.display = 'none';
+    Start_btn.hidden = true;
+    name_modal.hidden = true;
 
     time.textContent = number ; 
 
-    timeqcm =  setInterval (()=>{
-        
-    number++ ; 
+    timeqcm = setInterval(function(){
+        number++; 
         if(number == 60){
-        number = 0 ;
-        min++ ;
-
-     }
-     
-
-    time.textContent =min +' min' +':'+ number +' sec';
-    //console.log(number);
- 
-
-
-    },1000);
+            number = 0;
+            min++;
+        }
+        
+        time.textContent = min + ' min:' + number + ' sec';
+    }, 1000);
 
 
 
 showQuestion(currentQuestion);
 
 
-        let autoQuestionInterval = setInterval(()=>{
+        /*let autoQuestionInterval = setInterval(()=>{
           currentQuestion ++
           const my_themes = localStorage.getItem('themes');
           const currentThemeQuestions = themes[my_themes];
@@ -314,7 +308,7 @@ showQuestion(currentQuestion);
             clearInterval(autoQuestionInterval);
           }
             
-        },3000)
+        },3000)*/
 }
 
 
@@ -323,6 +317,9 @@ showQuestion(currentQuestion);
 function showQuestion (index){
 
     quiz_container.innerHTML = '';
+    
+    questionTimeLeft = 30;
+    clearInterval(questionTimer);
 
     const my_themes = localStorage.getItem('themes');
     const currentThemeQuestions = themes[my_themes];
@@ -339,88 +336,186 @@ function showQuestion (index){
     itemTitle.textContent = "Question " + (index + 1) + ": " + itemQ.q;
    
     itemDev.appendChild(itemTitle);
+    
+    const timerDisplay = document.createElement('div');
+    timerDisplay.id = 'question-timer';
+    timerDisplay.textContent = 'Temps restant: ' + questionTimeLeft + ' secondes';
+    itemDev.appendChild(timerDisplay);
+    
+    questionTimer = setInterval(function() {
+        questionTimeLeft--;
+        
+        if(timerDisplay) {
+            timerDisplay.textContent = 'Temps restant: ' + questionTimeLeft + ' secondes';
+        }
+        
+        if(questionTimeLeft <= 10) {
+        } else if(questionTimeLeft <= 20) {
+        }
+        
+        if(questionTimeLeft <= 0) {
+            clearInterval(questionTimer);
+            skipToNextQuestion(itemDev, itemQ);
+        }
+    }, 1000);
 
+    let selectedAnswers = [];
+    
     for (let i = 0; i < itemQ.options.length; i++) {
-
         const option = itemQ.options[i];
+        
+        if(itemQ.multi) {
+            const optionDiv = document.createElement('div');
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = 'option_' + i;
+            checkbox.value = i;
+            
+            const label = document.createElement('label');
+            label.htmlFor = 'option_' + i;
+            label.textContent = option;
+            
+            optionDiv.appendChild(checkbox);
+            optionDiv.appendChild(label);
+            itemDev.appendChild(optionDiv);
+            
+        } else {
+            const btnQ = document.createElement('button');
+            btnQ.textContent = option;
 
-        const btnQ = document.createElement('button');
-        btnQ.textContent = option;
-
-        btnQ.addEventListener('click',function(answerBtn, optionIndex){
-            return function (){
-
-                const allButtons = itemDev.querySelectorAll('button');
-                
-
-                if(itemQ.correct.includes(optionIndex)){
-                    answerBtn.style.backgroundColor = 'green';
-                    result++;
-                }
-              
-                else{
-                    answerBtn.style.backgroundColor = 'red';
-
-                    // Show correct answers in green
-                    for(let j = 0; j < allButtons.length; j++){
-                        if(itemQ.correct.includes(j)){
-                            allButtons[j].style.backgroundColor = 'green';
-                        }
-                    }
-                }
-
-                
-
-
-                
-
-                setTimeout (()=>{
-                    currentQuestion++;
-
-                    if(currentQuestion < currentThemeQuestions.length){
-                        showQuestion(currentQuestion);
-                    }
-                    else{
-                        let feedback = '';
-                        let feedbacktime = '';
-
-                        if(result >= 8 )
-                        {
-                            feedback = 'Excellent';
-                        }
-
-                        else if (result >= 5){
-                            feedback = 'Bien';
-                        }
-                        else{
-                            feedback = 'Peut mieux faire';
-                        };
-
-                        if(min >= 5){
-                            feedbacktime = 'You can be faster!';
-                        }
-                        else{
-                            feedbacktime = 'Good job on time!';
-                        }
-
-                        quiz_container.innerHTML= "Score: " + result + "/" + currentThemeQuestions.length + "<br>Time: " + time.textContent + "<br>" + feedback + "<br>" + feedbacktime + "<br>Félicitations " + nickname.value + "!";
-
-                        
-                        time.style.display='none'
-
-                        clearInterval(timeqcm);
-                        
-                      
-                      
-                    }
-
+            btnQ.addEventListener('click',function(answerBtn, optionIndex){
+                return function (){
+                    clearInterval(questionTimer);
                     
-               }, 500);
+                    const allButtons = itemDev.querySelectorAll('button');
+                    
+                    for(let k = 0; k < allButtons.length; k++) {
+                        allButtons[k].disabled = true;
+                    }
+
+                    if(itemQ.correct.includes(optionIndex)){
+                        answerBtn.style.backgroundColor = 'green';
+                        answerBtn.style.color = 'white';
+                        result++;
+                    } else {
+                        answerBtn.style.backgroundColor = 'red';
+                        answerBtn.style.color = 'white';
+                        for(let j = 0; j < allButtons.length; j++){
+                            if(itemQ.correct.includes(j)){
+                                allButtons[j].style.backgroundColor = 'green';
+                                allButtons[j].style.color = 'white';
+                            }
+                        }
+                    }            setTimeout(function(){
+                currentQuestion++;
+                if(currentQuestion < currentThemeQuestions.length){
+                    showQuestion(currentQuestion);
+                } else {
+                    showResults();
+                }
+            }, 1500);
+                }
+            }(btnQ, i));
+            
+            itemDev.appendChild(btnQ);
+        }
+    }
+    
+    if(itemQ.multi) {
+        const submitBtn = document.createElement('button');
+        submitBtn.textContent = 'Confirmer';
+        
+        submitBtn.addEventListener('click', function(){
+            clearInterval(questionTimer);
+            
+            const            checkboxes = itemDev.querySelectorAll('input[type="checkbox"]');
+            selectedAnswers = [];
+            
+            for(let k = 0; k < checkboxes.length; k++) {
+                if(checkboxes[k].checked) {
+                    selectedAnswers.push(k);
+                }
             }
-        }(btnQ, i));
+            
+            // Check if user selected at least one answer
+            if(selectedAnswers.length === 0) {
+                alert('Veuillez sélectionner au moins une réponse!');
+                // Restart timer if no answer selected
+                questionTimer = setInterval(function() {
+                    questionTimeLeft--;
+                    var timerDisplay = document.getElementById('question-timer');
+                    if(timerDisplay) {
+                        timerDisplay.textContent = 'Temps restant: ' + questionTimeLeft + ' secondes';
+                    }
+                    if(questionTimeLeft <= 0) {
+                        clearInterval(questionTimer);
+                        skipToNextQuestion(itemDev, itemQ);
+                    }
+                }, 1000);
+                return;
+            }
+            
+            // Disable all checkboxes and submit button
+            for(let k = 0; k < checkboxes.length; k++) {
+                checkboxes[k].disabled = true;
+            }
+            submitBtn.disabled = true;
+            
+            // Check answers
+            let correctCount = 0;
+            let totalCorrect = itemQ.correct.length;
+            
+            // Count correct selections
+            for(let k = 0; k < selectedAnswers.length; k++) {
+                if(itemQ.correct.includes(selectedAnswers[k])) {
+                    correctCount++;
+                }
+            }
+            
+            // Check for wrong selections
+            wrongSelections = [];
+            for(let k = 0; k < selectedAnswers.length; k++) {
+                if(!itemQ.correct.includes(selectedAnswers[k])) {
+                    wrongSelections.push(selectedAnswers[k]);
+                }
+            }
+            
+            // Calculate score: correct selections minus wrong selections, but not below 0
+            let questionScore = Math.max(0, correctCount - wrongSelections.length);
+            
+            // Give full point only if all correct answers are selected and no wrong ones
+            if(correctCount === totalCorrect && wrongSelections.length === 0) {
+                result++;
+                questionScore = 1;
+            } else if(correctCount > 0 && wrongSelections.length === 0) {
+                // Partial credit if some correct answers selected and no wrong ones
+                result += questionScore / totalCorrect;
+            }
+            
+            // Show feedback
+            for(let k = 0; k < checkboxes.length; k++) {
+                var label = checkboxes[k].nextElementSibling;
+                if(itemQ.correct.includes(k)) {
+                    label.style.color = 'green';
+                    label.style.fontWeight = 'bold';
+                } else if(selectedAnswers.includes(k)) {
+                    label.style.color = 'red';
+                    label.style.fontWeight = 'bold';
+                }
+            }
+            
+            setTimeout(function() {
+                currentQuestion++;
+                if(currentQuestion < currentThemeQuestions.length){
+                    showQuestion(currentQuestion);
+                } else {
+                    showResults();
+                }
+            }, 2000);
+        });
         
-        itemDev.appendChild(btnQ);
-        
+        itemDev.appendChild(submitBtn);
     }
     quiz_container.appendChild(itemDev);
 }
@@ -428,3 +523,95 @@ function showQuestion (index){
 
 
 //console.log(questions[0].o[1])
+function showResults() {
+    const my_themes = localStorage.getItem('themes');
+    const currentThemeQuestions = themes[my_themes];
+    
+    let feedback = '';
+    let feedbacktime = '';
+    
+    // Calculate percentage score
+    let percentage = Math.round((result / currentThemeQuestions.length) * 100);
+
+    if(percentage >= 80) {
+        feedback = 'Excellent!';
+    } else if(percentage >= 60) {
+        feedback = 'Bien!';
+    } else if(percentage >= 40) {
+        feedback = 'Peut mieux faire';
+    } else {
+        feedback = 'Il faut réviser!';
+    }
+
+    if(min >= 5){
+        feedbacktime = 'You can be faster!';
+    } else {
+        feedbacktime = 'Good job on time!';
+    }
+
+    quiz_container.innerHTML = '<div class="results-container">' +
+            '<h2>Résultats du Quiz</h2>' +
+            '<p class="score">Score: ' + result.toFixed(1) + '/' + currentThemeQuestions.length + '</p>' +
+            '<p class="percentage">Pourcentage: ' + percentage + '%</p>' +
+            '<p class="time">Temps: ' + time.textContent + '</p>' +
+            '<p class="feedback">' + feedback + '</p>' +
+            '<p class="time-feedback">' + feedbacktime + '</p>' +
+            '<p class="congratulations">Félicitations ' + nickname.value + '!</p>' +
+        '</div>';
+    
+    time.hidden = true;
+    clearInterval(timeqcm);
+    clearInterval(questionTimer); // Clear question timer too
+}
+
+function skipToNextQuestion(itemDev, itemQ) {
+    // Show time's up message
+    const timeUpMsg = document.createElement('div');
+    timeUpMsg.className = 'time-up-message';
+    timeUpMsg.textContent = 'Temps écoulé! Passage à la question suivante...';
+    
+    itemDev.appendChild(timeUpMsg);
+    
+    // Disable all interactive elements
+    buttons = itemDev.querySelectorAll('button');
+    checkboxes = itemDev.querySelectorAll('input[type="checkbox"]');
+    
+    for(let i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+    }
+    for(let i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].disabled = true;
+    }
+    
+    // Show correct answers
+    if(itemQ.multi) {
+        for(let i = 0; i < checkboxes.length; i++) {
+            var label = checkboxes[i].nextElementSibling;
+            if(itemQ.correct.includes(i)) {
+                label.style.color = 'green';
+                label.style.fontWeight = 'bold';
+                label.textContent = label.textContent;
+            }
+        }
+    } else {
+        for(let i = 0; i < buttons.length; i++) {
+            if(itemQ.correct.includes(i)) {
+                buttons[i].style.backgroundColor = 'green';
+                buttons[i].style.color = 'white';
+            }
+        }
+    }
+    
+    // Move to next question after showing correct answers
+    setTimeout(function() {
+        var my_themes = localStorage.getItem('themes');
+        var currentThemeQuestions = themes[my_themes];
+        
+        currentQuestion++;
+        if(currentQuestion < currentThemeQuestions.length){
+            showQuestion(currentQuestion);
+        } else {
+            showResults();
+        }
+    }, 2000);
+}
